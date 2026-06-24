@@ -219,7 +219,6 @@
         let grandTotal = 0;
 
         function ambilStokProdukSpreadsheet() {
-            // Ambil Data Produk & Katalog
             fetch(SCRIPT_URL, {
                 method: "POST",
                 body: JSON.stringify({ action: "getProduk" })
@@ -233,14 +232,12 @@
                 }
             }).catch(err => console.log("Gagal ambil produk:", err));
             
-            // Ambil Riwayat Jurnal Transaksi Langsung dari Google Sheets
             fetch(SCRIPT_URL, {
                 method: "POST",
                 body: JSON.stringify({ action: "getRiwayat" })
             })
             .then(res => res.json())
             .then(res => {
-                // Mengantisipasi variasi format return data dari script bawaan
                 if(res.status === "success" && res.data) {
                     jurnalTransaksi = res.data;
                 } else if(Array.isArray(res)) {
@@ -292,7 +289,6 @@
             }
 
             jurnalTransaksi.forEach((t, index) => {
-                // Map data jika bentuknya Array ataupun Object
                 const waktu = t.waktu || t[0] || '-';
                 const id = t.id || t.idTransaksi || t[1] || '-';
                 const deskripsi = t.deskripsi || t.items || t[2] || '-';
@@ -331,7 +327,6 @@
             document.getElementById('notaMetode').innerText = "Metode: " + metode;
             document.getElementById('notaTotal').innerText = "Rp " + parseInt(total).toLocaleString('id-ID');
 
-            // Pecah deskripsi produk biar rapi tampil ke struktur nota kertas
             const containerItems = document.getElementById('notaItems');
             containerItems.innerHTML = "";
             
@@ -344,7 +339,6 @@
                 `;
             });
 
-            // Smooth scroll ke area preview nota biar keliatan langsung di HP
             document.getElementById('areaNotaCetak').scrollIntoView({ behavior: 'smooth' });
         }
 
@@ -511,7 +505,6 @@
             document.getElementById('page-keuangan').classList.add('hidden');
             document.getElementById('page-' + id).classList.remove('hidden');
             
-            // Auto reload riwayat data saat halaman riwayat dibuka
             if(id === 'riwayat') {
                 ambilStokProdukSpreadsheet();
             }
